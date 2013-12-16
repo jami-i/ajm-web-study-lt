@@ -1,0 +1,258 @@
+<h1>AltJSさわってみた</h1>
+
+<h2>AltJSって</h2>
+
+<p>Alternative JavaScript ・・・ つまりJSの代わりになる言語。</p>
+
+<ul>
+<li>Coffee Script</li>
+<li>Dart</li>
+<li>Haxe</li>
+<li>JSX</li>
+<li>Kotlin</li>
+<li>TypeScript</li>
+</ul>
+
+
+<p>あたり。</p>
+
+<p>コンパイルすることによってJSに変換される。
+→ 実行時はJSになる。</p>
+
+<h2>JSといえば・・・</h2>
+
+<h3>型がない。ゆるふわBoolean変換。</h3>
+
+<p>PHPと同じでゆるふわなチェック。</p>
+
+<p><pre><code data-trim>javascript
+"1" == 1    // true
+""  == true // false
+1   == true // true
+</pre></code></p>
+
+
+
+<p><pre><code data-trim>coffee
+(k) =&gt; k + 2
+</pre></code>
+だけで良いよね？</p>
+
+<h3>わかりにくいPrototype</h3>
+
+<p><pre><code data-trim>javascript
+function Hoge(value) {
+    this.value = value;
+}
+Hoge.prototype.getValue = function() {
+    return this.value;
+}
+</pre></code></p>
+
+<h3>さらに</h3>
+
+<p><pre><code data-trim>
+var h = Hoge("hello").getValue();     // &lt;- NG
+var w = new Hoge("hello").getValue(); // &lt;- OK
+</pre></code></p>
+
+<h3>コールバック地獄</h3>
+
+<p><pre><code data-trim>javascript
+hoge(function(){
+    piyo(function(){
+        moga(function(){
+            alert("WRYYYYYYYY");
+        });
+    });
+ });
+</pre></code></p>
+
+<h3>this</h3>
+
+<p>コンソールログにはなんと出力されるでしょう？</p>
+
+<p><pre><code data-trim>javascript
+console.log((function(){ return this; })() === window);
+</pre></code></p>
+
+<p>via <a href="http://qiita.com/KDKTN/items/0b468a07410d757ac609">じゃあ this の抜き打ちテストやるぞー</a></p>
+
+<h3>あああああもう</h3>
+
+<p>上記の理由からJavascriptからの脱却を図りたい。</p>
+
+<h3>JSの代わりになるものを探そう。</h3>
+
+<p>できればJSを避けたいがクライアント(ブラウザ)で動く言語のなかで最もハードルが低い。</p>
+
+<p>ActiveX -> Java(Applet) -> ActionScript(Flash) -> Javascript</p>
+
+<p>Javascriptを避けては通れない。</p>
+
+<h2>ということでAltJS</h2>
+
+
+
+
+
+
+<h2>結論から言うと</h2>
+
+
+
+<h2>CoffeeScript</h2>
+
+<p>言わずもがなAltJSの代表格。Ruby,Pythonぽい。</p>
+
+<p>ブロック<pre><code data-trim>{}</pre></code>の代わりにインデントを利用する。</p>
+
+<p>文字列への代入(String Interpolation)や複数行正規表現リテラルなど、JSにはない機能が沢山。分割代入も便利。</p>
+
+<p>```coffee
+class Hello
+  constructor: (@name = "world") ->
+  say : ->
+    "Hello, #{@name}."</p>
+
+<p>res = (new Hello().say() is "Hello, world." ) # -> true</p>
+
+<pre><pre><code data-trim>
+#### インストール
+
+npm経由でインストール
+
+```npm install -g coffee-script```
+
+### 良い点
+
+表現力はすごく高い。余計な記号(```(),{}```)がないため可読性も高い。
+文脈っぽくなるので書いていて気持ちいい。テンションあがる。
+
+### 悪い点
+
+* 型がないため、メソッドの戻り値の型がわからない。
+
+    &gt; あぶない。 #突然の死
+
+* JSそのものとはかけ離れている。=&gt; 学習コスト
+
+    &gt; 最初1週間は本を見ながら出ないとかけなかった。
+
+* 長続きする技術？
+
+### 開発環境
+
+* テキストエディタ
+* WebStorm : 補完 ✓
+* VisualStudio(2012+) : 補完 ✓
+
+## TypeScript
+
+標準化JavascriptであるECMAScript 6のスーパーセット。
+
+Microsoft製。
+
+
+
+
+<h3>インストール</h3>
+
+<p>MS製だからといってWindowsじゃないと開発できないわけではない。</p>
+
+<p>npm経由のインストールする。</p>
+
+<p><pre><code data-trim>npm install -g typescript</pre></code></p>
+
+<p>WindowsではVisualStudioのプラグインとしてインストールすることもできる。</p>
+
+<p><a href="http://www.microsoft.com/en-us/download/details.aspx?id=34790">TypeScript for Visual Studio 2012 and 2013</a></p>
+
+<h3>開発環境</h3>
+
+<ul>
+<li>テキストエディタ</li>
+<li>WebStorm : 補完 ✓</li>
+<li>VisualStudio(w/ plugin) : 補完 ✓</li>
+</ul>
+
+
+<p>いろいろ試したけどVisualStudioが一番良く出来てる。</p>
+
+<h3>良い点</h3>
+
+<p>未来のJSの形に近い(はず)</p>
+
+<p>基本的にJS。JSのコードをそのまま貼っつけても動く。(型情報がないので警告がでるが)</p>
+
+
+
+<p>既存のJSも利用することができる。様々な既存ライブラリの型情報は<a href="https://github.com/borisyankov/DefinitelyTyped">DefinitelyTyped</a>にある。</p>
+
+<p>既存コードも型情報だけ定義すれば利用できる。</p>
+
+<h3>悪い点</h3>
+
+<p>型定義情報ファイルを別途コンパイル必要がある。</p>
+
+<p><pre><code data-trim>TypeScript
+declare Hello
+</pre></code></p>
+
+<p>既存JSの実装がゆるふわだとジェネリクス等をうまく型定義できず、
+any(javaのObjectに相当)で定義せざるを得なくなる。</p>
+
+<p>tsファイル単体でコンパイルすると正常なのに
+Gruntからまとめてコンパイルする際にコンパイルエラーが出る・・・</p>
+
+<blockquote><p>依存関係の問題？</p></blockquote>
+
+<p>コンパイラ不安定</p>
+
+<blockquote><p>Version 0.9.5.0 (2013/12/10現在)</p></blockquote>
+
+<p>すでに問題にぶち当たった。</p>
+
+<blockquote><p><a href="http://typescript.codeplex.com/workitem/1570">http://typescript.codeplex.com/workitem/1570</a></p></blockquote>
+
+<h3>そのほかのAltJS</h3>
+
+
+
+<h2>今回採用したのはTypeScript</h2>
+
+<ul>
+<li><p>ジェネリクスがある</p>
+
+<p>  処理の大半を占めるリスト操作が静的型で実装できる</p>
+
+<blockquote><p>確実なコードをかける。</p></blockquote></li>
+<li><p>学習コストが低い。</p>
+
+<p>  JSに近い構文なので、あまり勉強しなくても入れる。</p></li>
+<li><p>将来的にデファクトスタンダードとなりうる</p>
+
+<p>  ECMAScript6ほぼそのまま。</p></li>
+<li><p>CoffeeScriptを採用する理由がない。</p></li>
+</ul>
+
+
+<h2>CoffeeScriptが悪いわけではない</h2>
+
+<ul>
+<li><p>デファクトスタンダードである</p>
+
+<p>  <pre><code data-trim>Gruntfile.coffee</pre></code> とかあるし(震え声)</p></li>
+<li><p>GithubのBot(hubot)だってCoffeeScriptだよ！</p>
+
+<p>  散々CoffeeScript書いた。</p></li>
+</ul>
+
+
+<h2>まとめ</h2>
+
+<p><strong>JS書いてる場合じゃねぇ！</strong></p>
+
+<p><img src="ttps://photos-5.dropbox.com/t/0/AAByBM6ZwOX8YfByk-AhEuhKB5hAINoqqs30hVfedo-6xw/12/20057885/jpeg/1024x768/3/1386856800/0/2/%E3%81%88%E3%83%BC%E3%83%9E%E3%82%B8%E3%83%BCJS%EF%BC%9F.jpg/tX88PxC3uvlSJmX35g9lB79H6K35kPxgDZBVAwil1LI" alt="image" /></p>
+
+<p><strong>AltJS使おう！</strong></p>
